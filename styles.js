@@ -14,14 +14,33 @@ const styles = StyleSheet.create({
       paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 
     },
     container: {
-      flex: 20,
+      flex: 1,
       padding: 10,
+      alignContent: 'space-between'
     },
     emptyMessage:{
       textAlign: "center",
       fontSize: 30,
       fontWeight: 'bold',
       color: '#FFFFFF'
+    },
+    button:{
+        backgroundColor: '#FFFFFF',
+        alignSelf: 'flex-start',
+        borderRadius: 50,
+        padding: 10,
+        bottom: 40,
+        left: 20,
+        position: 'absolute',
+        borderWidth: 0.1,
+        elevation: 50
+    },
+    buttonText: {
+        textAlign: 'center',
+        fontSize: 16,
+        fontWeight: 'bold',
+        paddingTop: 15,
+        paddingBottom: 15,
     }
 });
 
