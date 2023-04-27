@@ -1,9 +1,13 @@
 import {StatusBar as ExpoStatusBar} from 'expo-status-bar';
-import { StyleSheet, Text, View, ScrollView, StatusBar, SafeAreaView, Platform } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, StatusBar, SafeAreaView, Platform, FlatList, Touchable, TouchableOpacity } from 'react-native';
 import React, {useState} from 'react';
 import Layout from './components/layout';
 import Cards from './components/cards'
 import Modal from './components/modal';
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import DraggableFlatList, {
+  ScaleDecorator,
+} from "react-native-draggable-flatlist";
 
 export default function App() {
   const [items, setItems] = useState([]);
@@ -14,42 +18,63 @@ export default function App() {
   }
 
   const addItem = (title, desc, due) => {
-    if (title !== '' && desc !== '' && due !== ''){
+    if (title !== '' || desc !== '' || due !== ''){
       setId(id+1);
       setItems(items => [...items, {itemId: id, title: title, description: desc, dueDate: due}]);
     }
   }
 
+  const renderItem = ({ item, drag, isActive }) =>{
+    return(
+    <ScaleDecorator>
+      <TouchableOpacity
+          onLongPress={drag}
+          disabled={isActive}
+          backgroundColor={ isActive ? "red" : "black" }
+        >
+        <Cards itemId={item.itemId}
+            title={item.title} 
+            description={item.description} 
+            dueDate={item.dueDate}
+            removeItem={removeItem}/>
+      </TouchableOpacity>
+    </ScaleDecorator>
+    )
+  }
+
   return (
     <>
-    <SafeAreaView style={styles.safeareaview}>
+    <GestureHandlerRootView style={styles.root}>
+      <View>
+        <Text style={styles.title}>To Do:</Text>
+      </View>
       <View style={styles.container}>
-        <ScrollView>
-          {
-            items.map((item) => 
-              <Cards key={item.itemId} 
-                      itemId={item.itemId}
-                      title={item.title} 
-                      description={item.description} 
-                      dueDate={item.dueDate}
-                      removeItem={removeItem}
-                      >
-              </Cards>)
-          }
-        </ScrollView>
+        <DraggableFlatList
+          data={items}
+          keyExtractor={item => item.itemId}
+          onDragEnd={({ data }) => setItems(data)}
+          renderItem={renderItem}
+        />
         <Modal addItem={addItem}></Modal>
         <ExpoStatusBar style="auto" />
       </View>
       <View style={styles.navMenu}>
         <Text>NAVMENU</Text>
       </View>
-    </SafeAreaView>
+    </GestureHandlerRootView>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  safeareaview:{
+  title:{
+    flex: 0,
+    justifyContent: 'center',
+    padding: 15,
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  root:{
     flex:1,
     backgroundColor:'#ABCDD4',
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 
@@ -63,7 +88,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 20,
     padding: 10,
-    justifyContent: 'space-evenly',
   },
   navMenu: {
     flex: 1,
