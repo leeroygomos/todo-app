@@ -3,11 +3,12 @@ import {StatusBar as ExpoStatusBar} from 'expo-status-bar';
 import {Text, View, TouchableOpacity, Pressable} from 'react-native';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import DraggableFlatList, {ScaleDecorator} from "react-native-draggable-flatlist";
+import ConfettiCannon from 'react-native-confetti-cannon';
 
 import Cards from './components/cards'
 import Modal from './components/modal';
 
-import {styles, modalStyles} from './styles';
+import {styles} from './styles';
 
 export default function App() {
   const [items, setItems] = useState([]);
@@ -15,9 +16,6 @@ export default function App() {
 
   const removeItem = (idToRemove) =>{
     setItems(items.filter(item => item.itemId !== idToRemove));
-    if(items.length === 0){
-      //TODO celebration
-    }
   }
 
   const addItem = (desc, due) => {
@@ -58,9 +56,16 @@ export default function App() {
       <View style={styles.container}>
         {
           items.length === 0 ? 
+            <>
+            <ConfettiCannon count={200} 
+                            origin={{x: -100, y: 0}} 
+                            autoStart={true} 
+                            fadeOut={true}
+                            explosionSpeed={500}/>
             <Text style={styles.emptyMessage}>
               Congratulations! You have nothing to do!
             </Text> 
+            </>
             : <></>
         }
         <DraggableFlatList
