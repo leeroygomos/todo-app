@@ -1,43 +1,23 @@
-import * as React from 'react';
+import { useState } from 'react';
 import { Button, Card, Text } from 'react-native-paper';
-import { StyleSheet, View } from 'react-native';
 
-const cards = ({itemId, title, description, dueDate, removeItem}) => {
-    
-    const [complete, completeItem] = React.useState(false);
+import { cardStyles } from '../styles';
+
+const cards = ({itemId, description, dueDate, removeItem}) => {
+    const [complete, completeItem] = useState(false);
     
     return (
-        <View style={cardStyles.container}>
-            <Card>
-                <Card.Title titleVariant='titleLarge' 
-                            title={title} 
-                            subtitle={"Due: " + dueDate} 
-                            subtitleStyle={complete ? cardStyles.completedText: cardStyles.text}
-                            subtitleVariant='labelSmall' 
-                            titleStyle={complete ? cardStyles.completedText: cardStyles.text}/>
-                <Card.Content>
-                <Text variant="bodyMedium" style={complete ? cardStyles.completedText: cardStyles.text}>{description}</Text>
-                </Card.Content>
-                {/* <Card.Cover source={{ uri: 'https://picsum.photos/700' }} /> */}
-                <Card.Actions>
-                    <Button onPress={() => removeItem(itemId)}>Remove</Button>
-                    <Button onPress={() => completeItem(!complete)}>Done</Button>
-                </Card.Actions>
-            </Card>
-        </View>
+        <Card elevation={5} cardMode={'elevated'} style={cardStyles.container}>
+            <Card.Content>
+                <Text style={complete ? cardStyles.completedText: cardStyles.text}>{description}</Text>
+                {/* <Text variant="bodySmall" style={complete ? cardStyles.completedText: cardStyles.text}>{dueDate}</Text> */}
+            </Card.Content>
+            <Card.Actions>
+                <Button textColor={'#FFFFFF'} buttonColor={'#d3273e'} onPress={() => removeItem(itemId)}>Remove</Button>
+                <Button textColor={'#FFFFFF'} buttonColor={'#41b6e6'} onPress={() => completeItem(!complete)}>Done</Button>
+            </Card.Actions>
+        </Card>
     );
 }
-
-const cardStyles = StyleSheet.create({
-    container: {
-      paddingTop:10,
-    },
-    text:{
-        
-    },
-    completedText:{
-        textDecorationLine: 'line-through'
-    }
-  });
 
 export default cards;
