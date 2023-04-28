@@ -3,14 +3,13 @@ import { Button, Card, Text } from 'react-native-paper';
 
 import { cardStyles } from '../styles';
 
-const cards = ({itemId, description, dueDate, removeItem}) => {
+const cards = ({itemId, description, removeItem}) => {
     const [complete, completeItem] = useState(false);
     
     return (
         <Card elevation={5} cardMode={'elevated'} style={cardStyles.container}>
             <Card.Content>
                 <Text style={complete ? cardStyles.completedText: cardStyles.text}>{description}</Text>
-                {/* <Text variant="bodySmall" style={complete ? cardStyles.completedText: cardStyles.text}>{dueDate}</Text> */}
             </Card.Content>
             <Card.Actions>
                 <Button textColor={'#FFFFFF'} buttonColor={'#d3273e'} onPress={() => removeItem(itemId)}>Remove</Button>

@@ -1,34 +1,84 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StatusBar as ExpoStatusBar} from 'expo-status-bar';
 import {Text, View, TouchableOpacity, Pressable} from 'react-native';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import DraggableFlatList, {ScaleDecorator} from "react-native-draggable-flatlist";
 import ConfettiCannon from 'react-native-confetti-cannon';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Cards from './components/cards'
 import Modal from './components/modal';
 
 import {styles} from './styles';
 
+const ITEMS_KEY = 'ITEMS';
+const ID_KEY = 'ID';
+
 export default function App() {
-  const [items, setItems] = useState([]);
-  const [id, setId] = useState(1);
+  const [items, setItems] = useState();
+  const [id, setId] = useState();
+
+  useEffect(() => {
+    const restoreData = async () => {
+      const getItems = await AsyncStorage.getItem(ITEMS_KEY);
+      const getId = await AsyncStorage.getItem(ID_KEY);
+
+      if (getItems !== null){
+        setItems(JSON.parse(getItems));
+      }
+      else{
+        setItems([]);
+      }
+      if (getId !== null){
+        setId(JSON.parse(getId));
+      }
+      else{
+        setId();
+      }
+    }
+
+    if (items === undefined && id === undefined){
+      restoreData();
+    }
+
+  }, []);
+
+  useEffect(() => {
+    if (items !== undefined){
+      saveItems();
+    }
+  }, [items]);
+
+  useEffect(() => {
+    if (id !== undefined){
+      saveId();
+    }
+  }, [id]);
+
+  const saveItems = async () => {
+    await AsyncStorage.setItem(ITEMS_KEY, JSON.stringify(items));
+  }
+
+  const saveId = async () => {
+    await AsyncStorage.setItem(ID_KEY, JSON.stringify(id));
+  }
 
   const removeItem = (idToRemove) =>{
     setItems(items.filter(item => item.itemId !== idToRemove));
+
   }
 
-  const addItem = (desc, due) => {
+  const addItem = (desc) => {
     if (desc !== ''){
         setId(id+1);
-        setItems(items => [...items, {itemId: id, description: desc, dueDate: due}]);
+        setItems((items => [...items, {itemId: id, description: desc}]));
     }
   }
 
   const getRandomActivity = () => {
     fetch('http://www.boredapi.com/api/activity/')
       .then(response => response.json())
-      .then(json => addItem(json.activity, ''));
+      .then(json => addItem(json.activity));
   }
 
   const renderItem = ({ item, drag, isActive }) => {
@@ -39,15 +89,14 @@ export default function App() {
           disabled={isActive}
         >
         <Cards itemId={item.itemId}
-              description={item.description} 
-              dueDate={item.dueDate}
+              description={item.description}
               removeItem={removeItem}/>
       </TouchableOpacity>
     </ScaleDecorator>
     )
   }
 
-  return (
+  return ( (items === undefined && id === undefined) ? <></> :
     <>
     <GestureHandlerRootView style={styles.root}>
       <View>
@@ -75,6 +124,7 @@ export default function App() {
               setItems(data);
             }}
           renderItem={renderItem}
+          style={styles.list}
         />
         <Modal addItem={addItem}></Modal>
         <Pressable style={styles.button} onPress={getRandomActivity}><Text style={styles.buttonText}>Bored?</Text></Pressable>

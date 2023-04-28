@@ -16,7 +16,10 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       padding: 10,
-      alignContent: 'space-between'
+      alignContent: 'space-between',
+    },
+    list:{
+        marginBottom: 110,
     },
     emptyMessage:{
       textAlign: "center",
@@ -33,7 +36,8 @@ const styles = StyleSheet.create({
         left: 20,
         position: 'absolute',
         borderWidth: 0.1,
-        elevation: 50
+        elevation: 10,
+        shadowColor: '#000000',
     },
     buttonText: {
         textAlign: 'center',

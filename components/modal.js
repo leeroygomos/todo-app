@@ -6,7 +6,6 @@ import { modalStyles as styles } from '../styles';
 const modal = ({addItem}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [description, updateDescription] = React.useState('');
-  const [dueDate, updateDueDate] = React.useState('');
 
   return (
     <>
@@ -24,15 +23,12 @@ const modal = ({addItem}) => {
           <TouchableWithoutFeedback>
             <View style={styles.modalView}>
               <Text style={styles.modalText}>Add a New Item</Text>
-              {/* <TextInput style={styles.input} value={title} placeholder="Title" onChangeText={updateTitle}></TextInput> */}
               <TextInput style={styles.input} value={description} placeholder="Description" onChangeText={updateDescription}></TextInput>
-              <TextInput style={styles.input} value={dueDate} placeholder="Due by (optional)" onChangeText={updateDueDate}></TextInput>
               <TouchableHighlight
                   style={[styles.button, styles.buttonClose]}
                   onPress={() => {
-                      addItem(description, dueDate);
+                      addItem(description);
                       updateDescription('');
-                      updateDueDate('');
                       setModalVisible(!modalVisible);
                       }
                   }>
