@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     },
     root:{
       flex:1,
-      backgroundColor: '#000000',
+      backgroundColor: '#2C3333',
       paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 
     },
     container: {
@@ -22,13 +22,13 @@ const styles = StyleSheet.create({
         marginBottom: 110,
     },
     emptyMessage:{
-      textAlign: "center",
-      fontSize: 30,
-      fontWeight: 'bold',
-      color: '#FFFFFF'
+        textAlign: "center",
+        fontSize: 30,
+        fontWeight: 'bold',
+        color: '#FFFFFF',
     },
     button:{
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#0E8388',
         alignSelf: 'flex-start',
         borderRadius: 50,
         padding: 10,
@@ -45,6 +45,18 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         paddingTop: 15,
         paddingBottom: 15,
+        color: '#FFFFFF'
+    },
+    loadingContainer:{
+        flex:1,
+        backgroundColor: '#000000',
+        alignItems:'center',
+        justifyContent: 'center'
+    },
+    loadingMessage:{
+        fontSize:20,
+        fontWeight:'bold',
+        color: '#FFFFFF'
     }
 });
 
@@ -65,11 +77,11 @@ const modalStyles = StyleSheet.create({
     },
     modalView: {
         margin: 1,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#CBE4DE',
         borderRadius: 20,
         padding: 35,
         alignItems: 'center',
-        shadowColor: '#000',
+        shadowColor: '#000000',
         shadowOffset: {
             width: 0,
             height: 2,
@@ -94,7 +106,7 @@ const modalStyles = StyleSheet.create({
         elevation: 2,
     },
     buttonOpen: {
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#0E8388',
         borderWidth: 0.1,
         elevation: 10,
         shadowColor: '#000000',
@@ -102,7 +114,7 @@ const modalStyles = StyleSheet.create({
         fontSize: 25,
     },
     buttonClose: {
-        backgroundColor: '#00bfb2'
+        backgroundColor: '#0E8388'
     },
     textStyle: {
         color: '#FFFFFF',
@@ -110,7 +122,7 @@ const modalStyles = StyleSheet.create({
         textAlign: 'left',
     },
     textStyleOpen: {
-      color: '#000000',
+      color: '#FFFFFF',
       textAlign: 'left',
       fontSize: 50,
     },
@@ -125,8 +137,8 @@ const modalStyles = StyleSheet.create({
 const cardStyles = StyleSheet.create({
     container: {
         marginTop: 10,
-        backgroundColor: '#00bfb2',
-        shadowColor: '#FFFFFF',
+        backgroundColor: '#CBE4DE',
+        shadowColor: '#000000',
     },
     text:{
         fontSize: 20
@@ -135,11 +147,6 @@ const cardStyles = StyleSheet.create({
         textDecorationLine: 'line-through',
         fontSize: 20
     },
-    button:{
-        color: '#FFFFFF',
-        backgroundColor: "#FFFFFF",
-        textColor: "#007a78"
-    }
 });
 
 export {styles, modalStyles, cardStyles};

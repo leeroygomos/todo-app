@@ -23,7 +23,12 @@ const modal = ({addItem}) => {
           <TouchableWithoutFeedback>
             <View style={styles.modalView}>
               <Text style={styles.modalText}>Add a New Item</Text>
-              <TextInput style={styles.input} value={description} placeholder="Description" onChangeText={updateDescription}></TextInput>
+              <TextInput style={styles.input} 
+                          value={description} 
+                          placeholder="Description" 
+                          onChangeText={updateDescription} 
+                          autoFocus={true}
+                          ></TextInput>
               <TouchableHighlight
                   style={[styles.button, styles.buttonClose]}
                   onPress={() => {
@@ -40,7 +45,7 @@ const modal = ({addItem}) => {
       </Modal>
       <TouchableHighlight
         style={[styles.buttonGlobal, styles.buttonOpen]}
-        onPress={() => setModalVisible(true)}>
+        onPress={() => {setModalVisible(true)}}>
         <Text style={styles.textStyleOpen}>+</Text>
       </TouchableHighlight>
       </>

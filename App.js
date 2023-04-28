@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {StatusBar as ExpoStatusBar} from 'expo-status-bar';
-import {Text, View, TouchableOpacity, Pressable} from 'react-native';
+import {Text, View, TouchableOpacity, Pressable, ScrollView} from 'react-native';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import DraggableFlatList, {ScaleDecorator} from "react-native-draggable-flatlist";
 import ConfettiCannon from 'react-native-confetti-cannon';
@@ -13,6 +13,7 @@ import {styles} from './styles';
 
 const ITEMS_KEY = 'ITEMS';
 const ID_KEY = 'ID';
+const EMPTY_MESSAGE = 'Congratulations! You have nothing to do!';
 
 export default function App() {
   const [items, setItems] = useState();
@@ -71,8 +72,15 @@ export default function App() {
   const addItem = (desc) => {
     if (desc !== ''){
         setId(id+1);
-        setItems((items => [...items, {itemId: id, description: desc}]));
+        setItems((items => [...items, {itemId: id, description: desc, completed: false}]));
     }
+  }
+
+  const completeItem = (idToComplete) => {
+    let updatedItems = items;
+    let index = updatedItems.findIndex((item) => item.itemId == idToComplete);
+    updatedItems[index].completed = !updatedItems[index].completed;
+    setItems(updatedItems);
   }
 
   const getRandomActivity = () => {
@@ -90,15 +98,23 @@ export default function App() {
         >
         <Cards itemId={item.itemId}
               description={item.description}
-              removeItem={removeItem}/>
+              completed={item.completed}
+              removeItem={removeItem}
+              completeItem={completeItem}/>
       </TouchableOpacity>
     </ScaleDecorator>
     )
   }
 
-  return ( (items === undefined && id === undefined) ? <></> :
+  return ( (items === undefined && id === undefined) ? 
     <>
-    <GestureHandlerRootView style={styles.root}>
+      <View style={styles.loadingContainer}>
+        <Text style={styles.loadingMessage}>Loading</Text>
+      </View>
+    </> 
+    :
+    <>
+    <View style={styles.root}>
       <View>
         <Text style={styles.title}>To Do List</Text>
       </View>
@@ -111,26 +127,28 @@ export default function App() {
                             autoStart={true} 
                             fadeOut={true}
                             explosionSpeed={500}/>
-            <Text style={styles.emptyMessage}>
-              Congratulations! You have nothing to do!
-            </Text> 
+            <Text style={styles.emptyMessage}>{EMPTY_MESSAGE}</Text> 
             </>
-            : <></>
+            :
+            <>
+            <GestureHandlerRootView>
+              <DraggableFlatList
+                data={items}
+                keyExtractor={item => item.itemId}
+                onDragEnd={({ data }) => {
+                    setItems(data);
+                  }}
+                renderItem={renderItem}
+                style={styles.list}
+              />
+            </GestureHandlerRootView>
+            </>
         }
-        <DraggableFlatList
-          data={items}
-          keyExtractor={item => item.itemId}
-          onDragEnd={({ data }) => {
-              setItems(data);
-            }}
-          renderItem={renderItem}
-          style={styles.list}
-        />
         <Modal addItem={addItem}></Modal>
         <Pressable style={styles.button} onPress={getRandomActivity}><Text style={styles.buttonText}>Bored?</Text></Pressable>
-        <ExpoStatusBar style="auto" />
+        {/* <ExpoStatusBar style="auto" /> */}
       </View>
-    </GestureHandlerRootView>
+    </View>
     </>
   );
 }
