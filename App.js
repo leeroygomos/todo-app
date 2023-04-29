@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {StatusBar as ExpoStatusBar} from 'expo-status-bar';
-import {Text, View, TouchableOpacity, Pressable, ScrollView} from 'react-native';
+import {Text, View, TouchableOpacity, Pressable} from 'react-native';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import DraggableFlatList, {ScaleDecorator} from "react-native-draggable-flatlist";
 import ConfettiCannon from 'react-native-confetti-cannon';
@@ -146,7 +146,7 @@ export default function App() {
         }
         <Modal addItem={addItem}></Modal>
         <Pressable style={styles.button} onPress={getRandomActivity}><Text style={styles.buttonText}>Bored?</Text></Pressable>
-        {/* <ExpoStatusBar style="auto" /> */}
+        <ExpoStatusBar style="auto" />
       </View>
     </View>
     </>
